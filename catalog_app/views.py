@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
-from catalog_app.models import Product
+from catalog_app.models import Product, Category
 
 
 # Create your views here.
@@ -14,3 +14,13 @@ def home_view(request):
         'title': 'Каталог - Наши услуги'
     }
     return render(request, 'catalog_app/home.html', context)
+
+
+def product_view(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    context = {
+        'product': product,
+        'title': f'Наши услуги {product.name}'
+    }
+    return render(request, 'catalog_app/product_detail.html', context)
+

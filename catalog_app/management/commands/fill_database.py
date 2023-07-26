@@ -6,12 +6,12 @@ from catalog_app.models import Category, Product
 class Command(BaseCommand):
     def handle(self, *args, **options):
         category_list = [
-            {'name': 'Category 1', 'description': 'Description of Category 1'},
+            {'name': 'Рассылки', 'description': 'отправка писем по электронной почте определенной группе адресатов.'},
             {'name': 'Category 2', 'description': 'Description of Category 2'},
             {'name': 'Category 3', 'description': 'Description of Category 3'},
         ]
         product_list = [
-            {'name': 'Product 1', 'description': 'Description of Product 1', 'price': 10.99, 'category': 'Category 1'},
+            {'name': 'Email-рассылка', 'description': 'Отправка писем по электронной почте определенной группе адресатов. Такой вид коммуникации — важная часть любой маркетинговой кампании, так как позволяет построить доверительные отношения с клиентами и повысить продажи.', 'price': 10.99, 'category': 'Рассылки'},
             {'name': 'Product 2', 'description': 'Description of Product 2', 'price': 19.99, 'category': 'Category 2'},
             {'name': 'Product 3', 'description': 'Description of Product 3', 'price': 26.99, 'category': 'Category 3'},
         ]

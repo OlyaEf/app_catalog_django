@@ -13,11 +13,17 @@
         <div class="col-3">
             <div class="card mb-4 box-shadow">
                 <div class="card-header">
-                    <h4 class="my-1 font-weight-normal">{{ object.name }}</h4>
+                    <h4 class="my-1 font-weight-normal">
+                         <a href="{% url 'catalog_app:product' object.pk %}">{{ object.name }}</a>
+                    </h4>>
                 </div>
                 <div class="card-body">
                     <h1 class="card-title pricing-card-title">{{ object.price }}</h1>
-                    <img src="{{ object.image|mediapath }}" alt="{{ object.name }}">
+                    {% if product.image %}
+                        <img src="{{ object.image.url }}" alt="{{ object.name }}">
+                    {% else %}
+                        <p>Изображение не доступно</p>
+                    {% endif %}
                     <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                         <li>{{ object.description|truncate_description }}</li>
                         <li>{{ object.category }}</li>

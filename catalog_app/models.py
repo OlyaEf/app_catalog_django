@@ -1,4 +1,5 @@
 from django.db import models
+from django.template.defaultfilters import slugify
 
 # Create your models here.
 
@@ -29,6 +30,25 @@ class Product(models.Model):
     def __str__(self):
         return f'{self.name} ({self.category})'
 
+    def save(self, *args, **kwargs):
+        if self.image:
+            # Получаем имя файла изображения
+            filename = self.image.name
+            # Генерируем уникальное имя файла, чтобы избежать перезаписи файлов с одинаковыми именами
+            unique_filename = f"product_photos/{slugify(self.name)}_{filename}"
+            # Устанавливаем уникальное имя файла в поле image
+            self.image.name = unique_filename
+
+        super().save(*args, **kwargs)
+
     class Meta:
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
+
+
+class ProductPhoto(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='product_photos/', verbose_name='фотография продукта')
+
+    def __str__(self):
+        return f'Фотография продукта: {self.product.name}'
