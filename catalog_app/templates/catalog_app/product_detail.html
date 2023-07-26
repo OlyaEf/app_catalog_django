@@ -1,4 +1,5 @@
 {% extends 'catalog_app/base.html' %}
+{% load custom_filters %}
 
 {% block content %}
 <div class="container">
@@ -10,7 +11,7 @@
         <div class="card-body">
             <h1 class="card-title pricing-card-title">{{ product.price }}</h1>
             {% if product.image %}
-                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                <img src="{{ product.image|mediapath }}" alt="{{ product.name }}">
             {% else %}
                 <p>Изображение не доступно</p>
             {% endif %}

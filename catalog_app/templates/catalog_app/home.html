@@ -20,7 +20,7 @@
                 <div class="card-body">
                     <h1 class="card-title pricing-card-title">{{ object.price }}</h1>
                     {% if product.image %}
-                        <img src="{{ object.image.url }}" alt="{{ object.name }}">
+                        <img src="{{ object.image|mediapath }}" alt="{{ object.name }}">
                     {% else %}
                         <p>Изображение не доступно</p>
                     {% endif %}
