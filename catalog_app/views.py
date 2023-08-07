@@ -1,4 +1,6 @@
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
+from django.views.generic import ListView, DetailView
 
 from catalog_app.models import Product, Category
 
@@ -8,19 +10,11 @@ def contacts_view(request):
     return render(request, 'catalog_app/contacts.html')
 
 
-def home_view(request):
-    context = {
-        'object_list': Product.objects.all(),
-        'title': 'Каталог - Наши услуги'
-    }
-    return render(request, 'catalog_app/home.html', context)
+class HomeListView(ListView):
+    model = Product
+    template_name = 'catalog_app/home.html'
 
 
-def product_view(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    context = {
-        'product': product,
-        'title': f'Наши услуги {product.name}'
-    }
-    return render(request, 'catalog_app/product_detail.html', context)
-
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'catalog_app/product_detail.html'

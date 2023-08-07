@@ -15,15 +15,15 @@
                 <div class="card-header">
                     <h4 class="my-1 font-weight-normal">
                          <a href="{% url 'catalog_app:product' object.pk %}">{{ object.name }}</a>
-                    </h4>>
+                    </h4>
+                    {% if object.image %}
+                        <img src="{{ object.image|mediapath }}" alt="{{ object.name }}" width="50vw">
+                     {% else %}
+                        <p>Изображение не доступно</p>
+                    {% endif %}
                 </div>
                 <div class="card-body">
                     <h1 class="card-title pricing-card-title">{{ object.price }}</h1>
-                    {% if product.image %}
-                        <img src="{{ object.image|mediapath }}" alt="{{ object.name }}">
-                    {% else %}
-                        <p>Изображение не доступно</p>
-                    {% endif %}
                     <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                         <li>{{ object.description|truncate_description }}</li>
                         <li>{{ object.category }}</li>

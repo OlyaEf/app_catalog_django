@@ -1,0 +1,25 @@
+{% extends 'catalog_app/base.html' %}
+{% load custom_filters %}
+{% block content %}
+<div class="container">
+    <div class="card mb-4 box-shadow">
+            <h1>{{ blog.title }}</h1>
+            <p>{{ blog.content }}</p>
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div class="btn-group">
+                    <a href="{% url 'blog:detail_post' blog.pk %}">
+                        <button type="button" class="btn btn-sm btn-outline-primary">View</button>
+                    </a>
+                    <a href="{% url 'blog:update_post' blog.pk %}">
+                        <button type="button" class="btn btn-sm btn-outline-primary">Edit</button>
+                    </a>
+                    <a href="{% url 'blog:delete_post' blog.pk %}">
+                        <button type="button" class="btn btn-sm btn-outline-primary">Delete</button>
+                    </a>
+                </div>
+                <small class="text-body-secondary">Просмотры: {{ blog.views_count}}</small>
+            </div>
+    </div>
+</div>
+{% endblock %}

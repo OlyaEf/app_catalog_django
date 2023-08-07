@@ -3,6 +3,7 @@
 from django import template
 from django.template.defaultfilters import truncatechars
 from django.templatetags.static import static
+from django.conf import settings
 
 register = template.Library()
 
@@ -10,7 +11,8 @@ register = template.Library()
 @register.filter
 def mediapath(image_path):
     # Формируем полный путь к медиафайлу, добавляя префикс '/media/'
-    return f"/media/{image_path}"
+    media = settings.MEDIA_URL
+    return f"{media}{image_path}"
 
 
 @register.filter
