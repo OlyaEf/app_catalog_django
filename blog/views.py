@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.utils.text import slugify
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -8,11 +7,6 @@ from blog.models import Blog
 
 class BlogListView(ListView):
     model = Blog
-
-    # def get_queryset(self, *args, **kwargs):
-    #     queryset = super().get_queryset(*args, **kwargs)
-    #     queryset = queryset.filter(is_published=True)
-    #     return queryset
 
 
 class BlogCreateView(CreateView):
