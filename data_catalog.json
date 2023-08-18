@@ -1,0 +1,111 @@
+[
+  {
+    "model": "catalog_app.category",
+    "pk": 26,
+    "fields": {
+      "name": "Рассылки",
+      "description": "отправка писем по электронной почте определенной группе адресатов."
+    }
+  },
+  {
+    "model": "catalog_app.category",
+    "pk": 29,
+    "fields": {
+      "name": "Телеграм боты",
+      "description": ""
+    }
+  },
+  {
+    "model": "catalog_app.category",
+    "pk": 30,
+    "fields": {
+      "name": "Полезные утилиты",
+      "description": ""
+    }
+  },
+  {
+    "model": "catalog_app.category",
+    "pk": 31,
+    "fields": {
+      "name": "Веб-приложения",
+      "description": ""
+    }
+  },
+  {
+    "model": "catalog_app.category",
+    "pk": 32,
+    "fields": {
+      "name": "Микросервисы",
+      "description": ""
+    }
+  },
+  {
+    "model": "catalog_app.product",
+    "pk": 26,
+    "fields": {
+      "name": "Email-рассылка",
+      "description": "Отправка писем по электронной почте определенной группе адресатов. Такой вид коммуникации — важная часть любой маркетинговой кампании, так как позволяет построить доверительные отношения с клиентами и повысить продажи.",
+      "image": "product_photos/Email-рассылка.jpg",
+      "category": 26,
+      "price": "10.99",
+      "created_at": "2023-07-27T14:03:41.393Z",
+      "updated_at": "2023-08-13T12:44:09.729Z"
+    }
+  },
+  {
+    "model": "catalog_app.product",
+    "pk": 27,
+    "fields": {
+      "name": "Чат Бот",
+      "description": "Чат-бот — это программа с искусственным интеллектом, имитирующая диалог с человеком и настроенная на мгновенный ответ на вопрос пользователя через мессенджеры, сайты, телефон или мобильное приложение.",
+      "image": "",
+      "category": 29,
+      "price": "19.99",
+      "created_at": "2023-07-27T14:03:41.400Z",
+      "updated_at": "2023-08-14T11:33:34.234Z"
+    }
+  },
+  {
+    "model": "catalog_app.product",
+    "pk": 28,
+    "fields": {
+      "name": "Веб-приложения",
+      "description": "Веб-приложение — клиент-серверное приложение, в котором клиент взаимодействует с веб-сервером при помощи браузера. Логика веб-приложения распределена между сервером и клиентом, хранение данных осуществляется, преимущественно, на сервере, обмен информацией происходит по сети.",
+      "image": "",
+      "category": 31,
+      "price": "26.99",
+      "created_at": "2023-07-27T14:03:41.405Z",
+      "updated_at": "2023-08-14T11:23:00.934Z"
+    }
+  },
+  {
+    "model": "catalog_app.version",
+    "pk": 1,
+    "fields": {
+      "product": 28,
+      "version_number": 1,
+      "version_name": "test",
+      "is_active": false
+    }
+  },
+  {
+    "model": "catalog_app.version",
+    "pk": 2,
+    "fields": {
+      "product": 27,
+      "version_number": 1,
+      "version_name": "test-bot",
+      "is_active": true
+    }
+  },
+  {
+    "model": "catalog_app.version",
+    "pk": 3,
+    "fields": {
+      "product": 27,
+      "version_number": 2,
+      "version_name": "test-2",
+      "is_active": false
+    }
+  }
+]

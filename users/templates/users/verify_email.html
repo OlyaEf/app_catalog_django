@@ -1,0 +1,21 @@
+{% extends 'catalog_app/base.html' %}
+
+{% block content %}
+    <div class="col-md-12">
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Подтвердите вашу электронную почту</h3>
+                    </div>
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <p>Здравствуйте, {{ user.username }}!</p>
+                        <p>Для завершения регистрации и подтверждения вашей электронной почты, пожалуйста, кликните по следующей ссылке:</p>
+                        <p><a href="{{ domain }}{% url 'users:verify_email_sent' uid=uid token=token %}">Подтвердить электронную почту</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
