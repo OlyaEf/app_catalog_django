@@ -4,6 +4,8 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from catalog_app.forms import ProductForm, VersionForm
 from catalog_app.models import Product, Version
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
 def contacts_view(request):
@@ -27,13 +29,26 @@ class ProductDetailView(DetailView):
     template_name = 'catalog_app/product_detail.html'
 
 
+@method_decorator(login_required(login_url='users:register'), name='dispatch')
 class ProductCreateView(CreateView):
     model = Product
     template_name = 'catalog_app/product_form.html'
     form_class = ProductForm
     success_url = reverse_lazy('catalog_app:home')
 
+    def form_validate(self, form):
+        response = super().form_valid(form)
+        self.object.owner = self.request.user
+        self.object.save()
+        # active_version_id = self.request.POST.get('active_version')  # Получаем значение из POST
+        # if active_version_id:
+        #     active_version = Version.objects.get(id=active_version_id)
+        #     active_version.is_active = True
+        #     active_version.save()
+        return response
 
+
+@method_decorator(login_required(login_url='users:register'), name='dispatch')
 class ProductUpdateView(UpdateView):
     model = Product
     template_name = 'catalog_app/product_form.html'
@@ -47,6 +62,7 @@ class ProductUpdateView(UpdateView):
             formset = VersionFormset(self.request.POST, instance=self.object)
         else:
             formset = VersionFormset(instance=self.object)
+
         context_data['formset'] = formset
         return context_data
 
@@ -57,9 +73,17 @@ class ProductUpdateView(UpdateView):
         if formset.is_valid():
             formset.instance = self.object
             formset.save()
+
+        active_version_id = self.request.POST.get('active_version')  # Получаем значение из POST
+        if active_version_id:
+            active_version = Version.objects.get(id=active_version_id)
+            active_version.is_active = True
+            active_version.save()
+
         return super().form_valid(form)
 
 
+@method_decorator(login_required(login_url='users:register'), name='dispatch')
 class ProductDeleteView(DeleteView):
     model = Product
     template_name = 'catalog_app/product_confirm_delete.html'

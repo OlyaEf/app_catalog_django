@@ -28,10 +28,11 @@
                         {{ formset.management_form }}
                         {% for form in formset.forms %}
                             {{ form.as_p }}
-{#                            {% if not forloop.last %}#}
-{#                                <hr>#}
-{#                            {% endif %}#}
                         {% endfor %}
+                        <div class="form-group">
+                            <label for="{{ form.is_active_version.id_for_label }}">Активная версия</label>
+                            {{ form.is_active_version }}
+                        </div>
                     </div>
                 </div>
             </div>

@@ -33,4 +33,7 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
 class VersionForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Version
-        fields = ('product', 'version_name', 'version_number', 'is_active')
+        fields = ('product', 'version_name', 'version_number')
+
+    # Добавьте поле выбора активной версии
+    active_version = forms.BooleanField(required=False, label="Активная версия")

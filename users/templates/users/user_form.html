@@ -7,15 +7,19 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">
-                            Профиль
+                            Мой Профиль
                         </h3>
                     </div>
                     <div class="card-body">
-                        {% csrf_token %}
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
                         {{ form.as_p }}
                         <button type="submit" class="btn btn-success">Сохранить</button>
+                        </form>
                     </div>
-                    <div class="card-footer"></div>
+                    <div class="card-footer">
+                        <a href="{% url 'users:generate_new_password' %}" class="btn btn-danger">Сгенерировать пароль</a>
+                    </div>
                 </div>
             </div>
         </form>

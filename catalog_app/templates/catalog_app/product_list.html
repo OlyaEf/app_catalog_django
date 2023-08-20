@@ -29,10 +29,11 @@
                         <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                             <li>{{ object.description|truncate_description }}</li>
                             {% for version in active_versions %}
-                            {% if version.product == object %}
-                                <li>Активная версия: {{ version.version_name }}</li>
-                            {% endif %}
-                        {% endfor %}
+                                {% if version.product == object %}
+                                    <p>{{ product.owner|default:"Свободное ПО" }}</p>
+                                    <li>Активная версия: {{ version.version_name }}</li>
+                                {% endif %}
+                            {% endfor %}
                         </ul>
                         <div class="list-unstyled mt-3 mb-4 text-start m-3">
                             <a href="{% url 'catalog_app:product' object.pk %}" class="btn-outline-secondary">{{ object.category }}</a>
