@@ -30,7 +30,7 @@
                             <li>{{ object.description|truncate_description }}</li>
                             {% for version in active_versions %}
                                 {% if version.product == object %}
-                                    <p>{{ product.owner|default:"Свободное ПО" }}</p>
+                                    <p class="text-muted"> Владелец предложения: {{ product.owner|default:"Свободное ПО" }}</p>
                                     <li>Активная версия: {{ version.version_name }}</li>
                                 {% endif %}
                             {% endfor %}

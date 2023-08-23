@@ -24,12 +24,10 @@ class RegisterView(CreateView):
     def form_valid(self, form):
         response = super().form_valid(form)
         new_user = form.save()
-
         # Создаем и сохраняем токен подтверждения
         token = ''.join(random.choices(string.ascii_letters + string.digits, k=50))
         new_user.email_verification_token = token
         new_user.save()
-
         # Отправляем письмо с подтверждением
         current_site = get_current_site(self.request)
         mail_subject = ('Подтвердите ваш аккаунт. '

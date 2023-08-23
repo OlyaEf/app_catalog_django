@@ -11,7 +11,7 @@
         <div class="card-body">
             <h1 class="card-title pricing-card-title">{{ product.price }}</h1>
             <p>{{ product.description }}</p>
-            <p class="text-muted">{{ product.owner|default:"Свободное ПО" }}</p>
+            <p class="text-muted"> Владелец предложения: {{ product.owner|default:"Свободное ПО" }}</p>
             <button type="button" class="btn btn-lg btn-block btn-outline-primary">Купить</button>
         </div>
     </div>

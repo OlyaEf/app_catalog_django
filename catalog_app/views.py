@@ -6,6 +6,7 @@ from catalog_app.forms import ProductForm, VersionForm
 from catalog_app.models import Product, Version
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.core.exceptions import PermissionDenied
 
 
 def contacts_view(request):
@@ -17,13 +18,14 @@ class ProductListView(ListView):
     template_name = 'catalog_app/product_list.html'
     context_object_name = 'products'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
         active_versions = Version.objects.filter(is_active=True)
         context['active_versions'] = active_versions
         return context
 
 
+@method_decorator(login_required(login_url='users:register'), name='dispatch')
 class ProductDetailView(DetailView):
     model = Product
     template_name = 'catalog_app/product_detail.html'
@@ -40,11 +42,6 @@ class ProductCreateView(CreateView):
         response = super().form_valid(form)
         self.object.owner = self.request.user
         self.object.save()
-        # active_version_id = self.request.POST.get('active_version')  # Получаем значение из POST
-        # if active_version_id:
-        #     active_version = Version.objects.get(id=active_version_id)
-        #     active_version.is_active = True
-        #     active_version.save()
         return response
 
 
@@ -82,6 +79,13 @@ class ProductUpdateView(UpdateView):
 
         return super().form_valid(form)
 
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        # Проверка, что текущий пользователь - владелец продукта
+        if self.object.owner != request.user and not request.user.is_superuser:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
+
 
 @method_decorator(login_required(login_url='users:register'), name='dispatch')
 class ProductDeleteView(DeleteView):
@@ -89,3 +93,9 @@ class ProductDeleteView(DeleteView):
     template_name = 'catalog_app/product_confirm_delete.html'
     success_url = reverse_lazy('catalog_app:home')
 
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        # Проверка, что текущий пользователь - владелец продукта
+        if self.object.owner != request.user and not request.user.is_superuser:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
