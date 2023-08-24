@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.forms import inlineformset_factory
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -45,12 +46,12 @@ class ProductCreateView(CreateView):
         return response
 
 
-@method_decorator(login_required(login_url='users:register'), name='dispatch')
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Product
     template_name = 'catalog_app/product_form.html'
     form_class = ProductForm
     success_url = reverse_lazy('catalog_app:home')
+    permission_required = 'catalog_app.can_change_is_published_permission'
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -67,6 +68,13 @@ class ProductUpdateView(UpdateView):
         context_data = self.get_context_data()
         formset = context_data['formset']
         self.object = form.save()
+        user = self.request.user
+        obj = self.get_object()
+
+        if user.has_perm('product.can_change_desc_permission') and user != obj.user:
+            form.instance.description = obj.description
+        if user.has_perm('product.can_change_category_permission') and user != obj.user:
+            form.instance.category = obj.category
         if formset.is_valid():
             formset.instance = self.object
             formset.save()
@@ -79,23 +87,15 @@ class ProductUpdateView(UpdateView):
 
         return super().form_valid(form)
 
-    def dispatch(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        # Проверка, что текущий пользователь - владелец продукта
-        if self.object.owner != request.user and not request.user.is_superuser:
-            raise PermissionDenied
-        return super().dispatch(request, *args, **kwargs)
+    def has_permission(self):
+        obj = self.get_object()
+        if self.request.user == obj.owner or self.request.user.is_staff:
+            return True
+        return super().has_permission()
 
 
-@method_decorator(login_required(login_url='users:register'), name='dispatch')
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Product
     template_name = 'catalog_app/product_confirm_delete.html'
     success_url = reverse_lazy('catalog_app:home')
-
-    def dispatch(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        # Проверка, что текущий пользователь - владелец продукта
-        if self.object.owner != request.user and not request.user.is_superuser:
-            raise PermissionDenied
-        return super().dispatch(request, *args, **kwargs)
+    permission_required = 'catalog_app.can_delete_product'

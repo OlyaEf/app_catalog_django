@@ -3,10 +3,10 @@ import string
 
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-from django.views import View
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.urls import reverse_lazy, reverse
+from django.views import View
 from django.views.generic import CreateView, UpdateView
 from django.shortcuts import redirect
 
@@ -49,7 +49,7 @@ class VerifyEmailView(View):
     def get(self, request, token):
         try:
             user = User.objects.get(email_verification_token=token)
-            user.email_verified = True
+            user.is_active = True
             user.save()
             return redirect('users:login')  # Редирект на страницу входа
         except User.DoesNotExist:
