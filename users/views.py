@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import CreateView, UpdateView
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 
 from users.forms import UserRegisterForm, UserForm
 from users.models import User
@@ -41,14 +41,14 @@ class RegisterView(CreateView):
 
 
 class VerifyEmailView(View):
-    def get(self, request, token):
+    def get(self, request, uid, token):
         try:
-            user = User.objects.get(email_verification_token=token)
+            user = User.objects.get(pk=uid, email_verification_token=token)
             user.is_active = True
             user.save()
-            return redirect('users:login')  # Редирект на страницу входа
+            return render(request, 'users/registration_success.html')  # Покажем сообщение о регистрации
         except User.DoesNotExist:
-            return HttpResponse('Неверная ссылка подтверждения.')
+            return render(request, 'users/registration_failed.html')  # Покажем сообщение об ошибке
 
 
 class ProfileView(UpdateView):
