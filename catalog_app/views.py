@@ -51,7 +51,11 @@ class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
     template_name = 'catalog_app/product_form.html'
     form_class = ProductForm
     success_url = reverse_lazy('catalog_app:home')
-    permission_required = 'catalog_app.can_change_is_published_permission'
+    permission_required = [
+        'catalog_app.can_change_is_published_permission',
+        'catalog_app.can_change_desc_permission',
+        'catalog_app.can_change_category_permission',
+    ]
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -78,6 +82,9 @@ class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
         if formset.is_valid():
             formset.instance = self.object
             formset.save()
+        if self.request.user == obj.owner:
+            # Владелец может менять любое поле
+            return super().form_valid(form)
 
         active_version_id = self.request.POST.get('active_version')  # Получаем значение из POST
         if active_version_id:
@@ -86,12 +93,6 @@ class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
             active_version.save()
 
         return super().form_valid(form)
-
-    def has_permission(self):
-        obj = self.get_object()
-        if self.request.user == obj.owner or self.request.user.is_staff:
-            return True
-        return super().has_permission()
 
 
 class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
