@@ -14,6 +14,8 @@ import os
 
 from pathlib import Path
 
+from dotenv import load_dotenv, find_dotenv
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -144,9 +146,11 @@ EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+load_dotenv(find_dotenv())
+
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
 
-DEFAULT_FROM_EMAIL = 'noreply@localhost.com'
-EMAIL_SUBJECT_PREFIX = '[Skystore]'
+# DEFAULT_FROM_EMAIL = 'noreply@localhost.com'
+# EMAIL_SUBJECT_PREFIX = '[Skystore]'

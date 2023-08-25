@@ -1,8 +1,8 @@
 import random
 import string
 
+from django.conf import settings
 from django.http import HttpResponse
-from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.urls import reverse_lazy, reverse
@@ -10,7 +10,6 @@ from django.views import View
 from django.views.generic import CreateView, UpdateView
 from django.shortcuts import redirect
 
-from config import settings
 from users.forms import UserRegisterForm, UserForm
 from users.models import User
 
@@ -30,18 +29,14 @@ class RegisterView(CreateView):
         new_user.save()
         # Отправляем письмо с подтверждением
         current_site = get_current_site(self.request)
-        mail_subject = ('Подтвердите ваш аккаунт. '
-                        'Пройдите по этой ссылке для подтверждения регистрации:')
-        message = render_to_string(
-            'users/verify_email.html',
-            {
-                'user': new_user,
-                'domain': current_site.domain,
-                'token': token,
-                'uid': new_user.pk,
-            },
+        mail_subject = 'Подтвердите ваш аккаунт'
+        message = (
+            f'Поздравляем, Вы зарегистрировались на нашем портале!\n'
+            f'Для завершения регистрации и подтверждения вашей электронной почты, '
+            f'пожалуйста, кликните по следующей ссылке:\n'
+            f'http://{current_site.domain}{reverse("users:verify_email", kwargs={"uid": new_user.pk, "token": token})}'
         )
-        send_mail(mail_subject, message, 'noreply@localhost', [new_user.email])
+        send_mail(subject=mail_subject, message=message, from_email=settings.EMAIL_HOST_USER, recipient_list=[new_user.email])
         return response
 
 
