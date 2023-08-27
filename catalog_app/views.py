@@ -9,6 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.core.exceptions import PermissionDenied
 
+from catalog_app.services import get_cached_categories
+
 
 def contacts_view(request):
     return render(request, 'catalog_app/contacts.html')
@@ -23,6 +25,7 @@ class ProductListView(ListView):
         context = super().get_context_data(*args, **kwargs)
         active_versions = Version.objects.filter(is_active=True)
         context['active_versions'] = active_versions
+        context['categories'] = get_cached_categories(self.kwargs.get('category_pk'))  # Используем сервисную функцию
         return context
 
 
